@@ -3,6 +3,7 @@ body {
     min-height: 100vh;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
 }
 
 .main {
@@ -96,3 +97,10 @@ button:active {
     transform: scale(0.98)
 }
 
+#error {
+    height: 24px;
+    color: red;
+    font-size: 18px;
+    font-style: italic;
+
+}

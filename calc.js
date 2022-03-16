@@ -11,8 +11,9 @@ const calc = {
     "-": function (num1, num2) { return num1 - num2 },
     "*": function (num1, num2) { return num1 * num2 },
     "/": function (num1, num2) {
-        if (num2 === 0) {
-            return 0;
+        if (num2 == "0") {
+            document.getElementById("error").textContent = "Cannot Divide By Zero!"
+            return num1 = "", num2 = "", disNum = ""
         } else {
             return num1 / num2
         }
@@ -68,6 +69,9 @@ function operator() {
             document.getElementById("curNum").textContent = disNum;
             document.getElementById("elog").textContent = num1 + op;
             document.getElementById("decimal").disabled = false;
+            console.log(num1);
+            console.log(num2);
+            console.log(disNum);
         })
     });
 }
@@ -128,9 +132,11 @@ function clears() {
         num2 = "";
         op = "";
         disNum = ""
+        addNum = true;
         sameNum.pop();
         document.getElementById("curNum").textContent = disNum;
         document.getElementById("elog").textContent = num1 + op
+        document.getElementById("error").textContent = ""
     });
 }
 
