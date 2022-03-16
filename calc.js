@@ -10,7 +10,13 @@ const calc = {
     "+": function (num1, num2) { return parseInt(num1) + parseInt(num2) },
     "-": function (num1, num2) { return num1 - num2 },
     "*": function (num1, num2) { return num1 * num2 },
-    "/": function (num1, num2) { return num1 / num2 },
+    "/": function (num1, num2) {
+        if (num2 === 0) {
+            return 0;
+        } else {
+            return num1 / num2
+        }
+    }
 };
 
 
@@ -21,13 +27,14 @@ function display() {
     numFloat();
     negate();
     equiv();
-    console.log(num1)
+    backspace();
+    clears();
 }
 
 function number() {
     document.querySelectorAll("button.numbers").forEach(function (nums) {
         nums.addEventListener("click", function () {
-            (addNum == true) ? disNum += nums.textContent : disNum = nums.textContent;
+            (addNum == true && disNum !== 0) ? disNum += nums.textContent : disNum = nums.textContent;
             addNum = true;
             document.getElementById("curNum").textContent = disNum;
         });
@@ -46,28 +53,32 @@ function operator() {
             }
             else if (num1 !== "" && addNum == false) {
                 op = ops.textContent
+            } else if (num1 !== "" && disNum == "") {
+                disNum = num1
+                op = ops.textContent
             }
             else if (num1 !== "" && disNum !== "") {
                 num2 = disNum;
                 num1 = calc[op](num1, num2);
                 disNum = num1;
- 
                 op = ops.textContent
             }
             addNum = false;
-            sameNum.pop();
+            sameNum.pop()
             document.getElementById("curNum").textContent = disNum;
-            document.getElementById("elog").textContent = num1 + op  ;
-            document.getElementById("decimal").disabled = false;   
+            document.getElementById("elog").textContent = num1 + op;
+            document.getElementById("decimal").disabled = false;
         })
     });
 }
 
 function numFloat() {
     document.getElementById("decimal").addEventListener("click", function () {
-        disNum += ".";
+        if (!disNum.includes(".")) {
+            disNum += ".";
+        }
         document.getElementById("curNum").textContent = disNum
-        document.getElementById("decimal").disabled = true
+
     })
 }
 
@@ -81,19 +92,35 @@ function negate() {
 function equiv() {
     document.getElementById("equal").addEventListener("click", function () {
         if (op === "") {
+            document.getElementById("elog").textContent = num1 + op + num2;
             num1 = disNum;
-        } else if (num1 !== "" && disNum !== "")  {
-            let x = sameNum.push(disNum)
+        } else if (num1 !== "" && disNum !== "" && addNum == false) {
+            sameNum.push(disNum)
             sameNum.length = 1;
             num1 = disNum;
             disNum = calc[op](num1, sameNum[0]);
+            document.getElementById("elog").textContent = num1 + op + sameNum[0];
+        }
+        else {
+            num2 = disNum;
+            document.getElementById("elog").textContent = num1 + op + num2;
+            num1 = calc[op](num1, num2);
+            disNum = num1;
+            op = ""
         }
         addNum = false
         document.getElementById("curNum").textContent = disNum
-        document.getElementById("elog").textContent = num1 + op + sameNum[0];
     })
 }
 
+function backspace() {
+    document.getElementById("backspace").addEventListener("click", function () {
+        if (addNum == true) {
+            disNum = String(disNum).slice(0, -1)
+            document.getElementById("curNum").textContent = disNum;
+        }
+    })
+}
 
 function clears() {
     document.getElementById("clear").addEventListener("click", function () {
@@ -107,36 +134,4 @@ function clears() {
     });
 }
 
-
-
 display();
-clears();
-
-
-
-
-/* 
-function operator() {
-    document.querySelectorAll("button.operators").forEach(function (ops) {
-        ops.addEventListener("click", function ()  {
-            if (num1 === "") {
-                num1 = disNum;
-                op = ops.textContent
-            }
-            else if (num1 !== "" && op !== "" ) {
-                op = ops.textContent
-            }
-            else if (num1 !== "" && disNum !== "") {
-                num2 = disNum;
-                num1 = calc[op](num1, num2);
-                disNum = num1; 
-                num2 = "";
-                op = ops.textContent
-            }
-            addNum = false; 
-            document.getElementById("curNum").textContent = disNum;
-            console.log(op);
-        })
-    });
-}
-            */
