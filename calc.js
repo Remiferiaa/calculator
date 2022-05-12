@@ -1,10 +1,14 @@
 let num1 = "";
 let num2 = "";
-let sameNum = [];
 let op = "";
 let disNum = "";
 let addNum = true;
 
+document.getElementById("decimal").addEventListener("click", numFloat);
+document.getElementById("negative").addEventListener("click", negate);
+document.getElementById("equal").addEventListener("click", equiv);
+document.getElementById("backspace").addEventListener("click", backspace);
+document.getElementById("clear").addEventListener("click", clears);
 
 const calc = {
     "+": function (num1, num2) { return parseFloat(num1) + parseFloat(num2) },
@@ -28,7 +32,6 @@ function number(nums) {
     (addNum == true && disNum !== 0) ? disNum += nums : disNum = nums;
     addNum = true;
     document.getElementById("curNum").textContent = disNum;
-
 }
 
 function operator(x) {
@@ -36,13 +39,11 @@ function operator(x) {
         num1 = disNum;
         op = x;
     }
-    else if (sameNum.length > 0) {
-        num1 = disNum;
-    }
     else if (num1 !== "" && addNum == false) {
+        num1 = disNum
         op = x;
     } else if (num1 !== "" && disNum == "") {
-        disNum = num1
+        disNum = num1  
         op = x;
     }
     else if (num1 !== "" && disNum !== "") {
@@ -52,7 +53,6 @@ function operator(x) {
         op = x;
     }
     addNum = false;
-    sameNum.pop()
     document.getElementById("curNum").textContent = disNum;
     document.getElementById("elog").textContent = num1 + op;
     document.getElementById("decimal").disabled = false;
@@ -75,11 +75,9 @@ function equiv() {
         num1 = disNum;
         document.getElementById("elog").textContent = num1 + op + num2;
     } else if (num1 !== "" && disNum !== "" && addNum == false) {
-        sameNum.push(disNum)
-        sameNum.length = 1;
         num1 = disNum;
-        disNum = calc[op](num1, sameNum[0]);
-        document.getElementById("elog").textContent = num1 + op + sameNum[0];
+        disNum = calc[op](num1, num2);
+        document.getElementById("elog").textContent = num1 + op + num2;
     }
     else {
         num2 = disNum;
@@ -96,7 +94,6 @@ function backspace() {
         disNum = String(disNum).slice(0, -1)
         document.getElementById("curNum").textContent = disNum;
     }
-
 }
 
 function clears() {
@@ -105,11 +102,9 @@ function clears() {
     op = "";
     disNum = ""
     addNum = true;
-    sameNum.pop();
-    document.getElementById("curNum").textContent = disNum;
+    display()
     document.getElementById("elog").textContent = num1 + op
     document.getElementById("error").textContent = ""
-
 }
 
 document.addEventListener("keydown", function (event) {
@@ -148,14 +143,6 @@ document.querySelectorAll("button.operators").forEach(function (ops) {
     })
 })
 
-document.getElementById("decimal").addEventListener("click", numFloat);
 
-document.getElementById("negative").addEventListener("click", negate);
-
-document.getElementById("equal").addEventListener("click", equiv);
-
-document.getElementById("backspace").addEventListener("click", backspace);
-
-document.getElementById("clear").addEventListener("click", clears);
 
 display();
